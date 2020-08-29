@@ -1,0 +1,475 @@
+{
+  "hyperparameters": [
+    {
+      "name": "algorithm",
+      "type": "categorical",
+      "choices": [
+        "bohb_cnn_regressor",
+        "bohb_lstm_regressor",
+        "auto_mlp_regressor"
+      ],
+      "default": "auto_mlp_regressor"
+    },
+    {
+      "name": "n_hidden_layers",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 5,
+      "default": 2
+    },
+    {
+      "name": "hidden_layer1",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 10,
+      "upper": 500,
+      "default": 500
+    },
+    {
+      "name": "hidden_layer2",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 10,
+      "upper": 500,
+      "default": 400
+    },
+    {
+      "name": "hidden_layer3",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 10,
+      "upper": 500,
+      "default": 300
+    },
+    {
+      "name": "hidden_layer4",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 10,
+      "upper": 500,
+      "default": 200
+    },
+    {
+      "name": "hidden_layer5",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 10,
+      "upper": 500,
+      "default": 100
+    },
+    {
+      "name": "cnn_n_layers",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 2
+    },
+    {
+      "name": "kernel_size1",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 1
+    },
+    {
+      "name": "kernel_size2",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 1
+    },
+    {
+      "name": "kernel_size3",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 1
+    },
+    {
+      "name": "n_filters1",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 16,
+      "upper": 64,
+      "default": 32
+    },
+    {
+      "name": "n_filters2",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 16,
+      "upper": 64,
+      "default": 32
+    },
+    {
+      "name": "n_filters3",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 16,
+      "upper": 64,
+      "default": 32
+    },
+    {
+      "name": "pooling_type",
+      "type": "categorical",
+      "choices": [
+        "max",
+        "average",
+        "identity"
+      ],
+      "default": "identity"
+    },
+    {
+      "name": "pool_size",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 2,
+      "upper": 3,
+      "default": 2
+    },
+    {
+      "name": "lstm_n_layers",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 1
+    },
+    {
+      "name": "n_cells1",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 100,
+      "upper": 600,
+      "default": 600
+    },
+        {
+      "name": "n_cells2",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 100,
+      "upper": 600,
+      "default": 500
+    },
+    {
+      "name": "n_cells3",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 100,
+      "upper": 600,
+      "default": 400
+    },
+    {
+      "name": "weight_decay",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0,
+      "upper": 0.1,
+      "default": 5e-3
+    },
+    {
+	  "name": "batch_size",
+	  "type": "categorical",
+	  "choices": [
+		250,
+		500,
+        1000,
+        2000,
+        4000,
+        6000
+	  ],
+	  "default": 6000
+    },
+    {
+	  "name": "dropout",
+	  "type": "categorical",
+	  "choices": [
+		0.0,
+		0.1,
+		0.2,
+        0.3,
+		0.4,
+		0.5,
+		0.6,
+        0.7,
+		0.8,
+        0.9
+	  ],
+	  "default": 0.0
+    },
+    {
+      "name": "learning_rate",
+      "type": "uniform_float",
+      "log": true,
+      "lower": 1e-5,
+      "upper": 1e-1,
+      "default": 1e-3
+    }
+  ],
+ "conditions": [
+    {
+     "child": "n_hidden_layers",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "auto_mlp_regressor"
+   },
+   {
+     "child": "hidden_layer1",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "auto_mlp_regressor"
+   },
+   {
+    "child": "hidden_layer2",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "hidden_layer2",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "auto_mlp_regressor"
+               },
+               {
+                 "child": "hidden_layer2",
+                 "parent": "n_hidden_layers",
+                 "type": "GT",
+                 "value": 1
+               }
+             ]
+   },
+   {
+    "child": "hidden_layer3",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "hidden_layer3",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "auto_mlp_regressor"
+               },
+               {
+                 "child": "hidden_layer3",
+                 "parent": "n_hidden_layers",
+                 "type": "GT",
+                 "value": 2
+               }
+             ]
+   },
+   {
+    "child": "hidden_layer4",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "hidden_layer4",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "auto_mlp_regressor"
+               },
+               {
+                 "child": "hidden_layer4",
+                 "parent": "n_hidden_layers",
+                 "type": "GT",
+                 "value": 3
+               }
+             ]
+   },
+   {
+    "child": "hidden_layer5",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "hidden_layer5",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "auto_mlp_regressor"
+               },
+               {
+                 "child": "hidden_layer5",
+                 "parent": "n_hidden_layers",
+                 "type": "GT",
+                 "value": 4
+               }
+             ]
+   },
+   {
+     "child": "cnn_n_layers",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_cnn_regressor"
+   },
+   {
+     "child": "n_filters1",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_cnn_regressor"
+   },
+   {
+    "child": "n_filters2",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "n_filters2",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_cnn_regressor"
+               },
+               {
+                 "child": "n_filters2",
+                 "parent": "cnn_n_layers",
+                 "type": "GT",
+                 "value": 1
+               }
+             ]
+   },
+   {
+    "child": "n_filters3",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "n_filters3",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_cnn_regressor"
+               },
+               {
+                 "child": "n_filters3",
+                 "parent": "cnn_n_layers",
+                 "type": "GT",
+                 "value": 2
+               }
+             ]
+   },
+   {
+    "child": "pool_size",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "pool_size",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_cnn_regressor"
+               },
+               {
+                 "child": "pool_size",
+                 "parent": "pooling_type",
+                 "type": "NEQ",
+                 "value": "identity"
+               }
+             ]
+   },
+   {
+     "child": "kernel_size1",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_cnn_regressor"
+   },
+   {
+    "child": "kernel_size2",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "kernel_size2",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_cnn_regressor"
+               },
+               {
+                 "child": "kernel_size2",
+                 "parent": "cnn_n_layers",
+                 "type": "GT",
+                 "value": 1
+               }
+             ]
+   },
+   {
+    "child": "kernel_size3",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "kernel_size3",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_cnn_regressor"
+               },
+               {
+                 "child": "kernel_size3",
+                 "parent": "cnn_n_layers",
+                 "type": "GT",
+                 "value": 2
+               }
+             ]
+   },
+   {
+     "child": "pooling_type",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_cnn_regressor"
+   },
+   {
+     "child": "lstm_n_layers",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_lstm_regressor"
+   },
+   {
+     "child": "n_cells1",
+     "parent": "algorithm",
+     "type": "EQ",
+     "value": "bohb_lstm_regressor"
+   },
+   {
+    "child": "n_cells2",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "n_cells2",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_lstm_regressor"
+               },
+               {
+                 "child": "n_cells2",
+                 "parent": "lstm_n_layers",
+                 "type": "GT",
+                 "value": 1
+               }
+             ]
+   },
+   {
+    "child": "n_cells2",
+     "type": "AND",
+     "conditions":
+             [
+               {
+                 "child": "n_cells3",
+                 "parent": "algorithm",
+                 "type": "EQ",
+                 "value": "bohb_lstm_regressor"
+               },
+               {
+                 "child": "n_cells3",
+                 "parent": "lstm_n_layers",
+                 "type": "GT",
+                 "value": 2
+               }
+             ]
+   }
+ ],
+
+"forbiddens": []
+}
